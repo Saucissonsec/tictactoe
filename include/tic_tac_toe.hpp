@@ -55,6 +55,7 @@ private:
 	size_t m_nb_columns;
 	square_t m_first_to_play;
 	square_t m_playing;
+	square_t m_winner;
 
 public :
 
@@ -62,6 +63,7 @@ public :
 		m_board(),
 		m_playing(hopp::random::true_false() ? square_t::X : square_t::O),
 		m_first_to_play(m_playing),
+		m_winner(square_t::None),
 		m_nb_rows(SIZE_BOARD),
 		m_nb_columns(SIZE_BOARD)
 		{
@@ -86,6 +88,11 @@ public :
 		if(get(i, j) == square_t::None)
 		{
 			get(i, j) = m_playing;
+			if(pick_winner(i, j))
+			{
+				end_game(m_winner);
+				return true;
+			}
 			next_turn();
 			return true;
 		}
@@ -98,12 +105,46 @@ public :
 		}
 	}
 
+	bool pick_winner(size_t const i, size_t const j){
+		if (get(i, 0) == m_playing && get(i, 1) == m_playing && get(i, 2) == m_playing) //checks horizontal
+			{ 
+				m_winner = m_playing; 
+				return true;
+			}
+			
+		else if (get(0, j) == m_playing && get(1, j) == m_playing && get(2, j) == m_playing) //checks vertical
+			{ 
+				m_winner = m_playing; 
+				return true;
+			}
+			
+		else if (get(0, 0) == m_playing && get(1, 1) == m_playing && get(2, 2) == m_playing) //checks diagonal l to r
+			{ 
+				m_winner = m_playing; 
+				return true;
+			}
+			
+		else if (get(0, 2) == m_playing && get(1, 1) == m_playing && get(2, 0) == m_playing) //chaeck diagonal r to l
+			{
+				m_winner = m_playing; 
+				return true;
+			}
+			
+		return false;
+	}
+
 	void next_turn()
 	{
 		if(m_playing == square_t::O)
 			m_playing = square_t::X;
 		else
 			m_playing = square_t::O;
+	}
+
+	void end_game(square_t winner)
+	{
+		std::cout << winner << " wins the game" << std::endl;
+		exit(0);
 	}
 
 private :

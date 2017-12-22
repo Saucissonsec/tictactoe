@@ -36,6 +36,13 @@ int main()
 	tic_tac_toe.play(2, 1);
 	std::cout<< tic_tac_toe;
 
+	tic_tac_toe.play(2, 0);
+	std::cout<< tic_tac_toe;
+
+
+	tic_tac_toe.play(1, 1);
+	std::cout<< tic_tac_toe;
+
 	
 	// rvalue
 	{
